@@ -9,9 +9,14 @@ interface Config {
   dbName: string;
   dbPort: number;
   nft: {
+    contractAddress: string;
+    rpcUrl: string;
+    pk: string;
     attestationUrl: string;
     openSeaUrl: string;
     blockScout: string;
+    pinataApiKey: string;
+    pinataSecretApiKey: string;
   };
 }
 
@@ -24,9 +29,14 @@ const config: Config = {
     dbName: process.env.DB_NAME || '',
     dbPort: process.env.DB_PORT ? parseInt(process.env.DB_PORT) : 5432,
     nft: {
+      contractAddress: process.env.NFT_CONTRACT_ADDRESS || '',
+      rpcUrl: process.env.RPC_URL || '',
+      pk: process.env.PK || '',
       attestationUrl: process.env.ATTESTATION_URL || '',
       openSeaUrl: process.env.OPENSEA_URL || '',
       blockScout: process.env.BLOCKSCOUT_URL || '',
+      pinataApiKey: process.env.PINATA_API_KEY || '',
+      pinataSecretApiKey: process.env.PINATA_SECRET_KEY || '',
     },
 }
 
