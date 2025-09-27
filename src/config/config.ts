@@ -1,0 +1,34 @@
+import dotenv from 'dotenv';
+dotenv.config();
+
+interface Config {
+  port: number;
+  dbUser: string;
+  dbPassword: string;
+  dbHost: string;
+  dbName: string;
+  dbPort: number;
+  nft: {
+    attestationUrl: string;
+    openSeaUrl: string;
+    blockScout: string;
+  };
+}
+
+const config: Config = {
+    port: process.env.PORT ? parseInt(process.env.PORT) : 3000,
+
+    dbUser: process.env.DB_USER || '',
+    dbPassword: process.env.DB_PASSWORD || '',
+    dbHost: process.env.DB_HOST || '',
+    dbName: process.env.DB_NAME || '',
+    dbPort: process.env.DB_PORT ? parseInt(process.env.DB_PORT) : 5432,
+    nft: {
+      attestationUrl: process.env.ATTESTATION_URL || '',
+      openSeaUrl: process.env.OPENSEA_URL || '',
+      blockScout: process.env.BLOCKSCOUT_URL || '',
+    },
+}
+
+export { config };
+

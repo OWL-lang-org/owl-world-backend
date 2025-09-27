@@ -1,0 +1,36 @@
+{
+  "name": "owl-world-backend",
+  "version": "1.0.0",
+  "description": "Backend repository for the OWL World Hackaton project",
+  "main": "src/index.ts",
+  "scripts": {
+    "dev": "nodemon src/index.ts",
+    "build": "tsc",
+    "start": "node dist/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/OWL-lang-org/owl-world-backend.git"
+  },
+  "author": "Nicolas Vergara",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/OWL-lang-org/owl-world-backend/issues"
+  },
+  "homepage": "https://github.com/OWL-lang-org/owl-world-backend#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.2",
+    "ethers": "^6.15.0",
+    "express": "^5.1.0",
+    "sequelize": "^6.37.7"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.3",
+    "@types/node": "^24.5.2",
+    "sequelize-cli": "^6.6.3",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.2"
+  }
+}
