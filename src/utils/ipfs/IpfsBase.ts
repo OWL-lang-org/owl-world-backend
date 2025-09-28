@@ -1,197 +1,41 @@
 export function ProvideBase(
-  id: string,
-  index: number,
-  location: string,
+  status: string,
   address: string,
-  data: string
+  data: string,
+  index: number,
 ) {
   const body = {
-    description: '',
+    description: 'This is the OWL Progress Badge',
     externalUrl: 'https://github.com/OWLSuperhack/owl-world-backend',
     image: '',
     name: 'OWL Progress Badge',
-    attributes: [{}],
+    status,
+    attributes: [
+      {
+        value: status,
+        trait_type: 'Status',
+      },
+      {
+        trait_type: 'Address',
+        value: address,
+      }
+    ]
   }
   switch (index) {
     case 0:
-      body.description = 'This is the first level of the OWL Progress Badge'
       body.image = ProvideImage(0)
-      body.attributes = [
-        {
-          display_type: "number", 
-          trait_type: 'Level',
-          value: '1',
-        },
-        {
-          trait_type: 'Rarity',
-          value: 'Common',
-        },
-        {
-          trait_type: 'Location',
-          value: location,
-        },
-        {
-          trait_type: 'Address',
-          value: address,
-        },
-        {
-          trait_type: 'ID',
-          value: id,
-        },
-        {
-          display_type: "boost_percentage",
-          trait_type: 'Progress',
-          value: index,
-        },
-        {
-          trait_type: 'Data',
-          value: data,
-        },
-      ]
       break
     case 6:
-      body.description = 'This is the second level of the OWL Progress Badge'
       body.image = ProvideImage(1)
-      body.attributes = [
-        {
-          display_type: "number", 
-          trait_type: 'Level',
-          value: '2',
-        },
-        {
-          trait_type: 'Rarity',
-          value: 'Rare',
-        },
-        {
-          trait_type: 'Location',
-          value: location,
-        },
-        {
-          trait_type: 'Address',
-          value: address,
-        },
-        {
-          trait_type: 'ID',
-          value: id,
-        },
-        {
-          display_type: "boost_percentage",
-          trait_type: 'Progress',
-          value: index,
-        },
-        {
-          trait_type: 'Data',
-          value: data,
-        },
-      ]
       break
     case 10:
-      body.description = 'This is the third level of the OWL Progress Badge'
       body.image = ProvideImage(2)
-      body.attributes = [
-        {
-          display_type: "number", 
-          trait_type: 'Level',
-          value: '3',
-        },
-        {
-          trait_type: 'Rarity',
-          value: 'Epic',
-        },
-        {
-          trait_type: 'Location',
-          value: location,
-        },
-        {
-          trait_type: 'Address',
-          value: address,
-        },
-        {
-          trait_type: 'ID',
-          value: id,
-        },
-        {
-          display_type: "boost_percentage",
-          trait_type: 'Progress',
-          value: index,
-        },
-        {
-          trait_type: 'Data',
-          value: data,
-        },
-      ]
       break
     case 11:
-      body.description = 'This is the fourth level of the OWL Progress Badge'
       body.image = ProvideImage(3)
-      body.attributes = [
-        {
-          display_type: "number", 
-          trait_type: 'Level',
-          value: '4',
-        },
-        {
-          trait_type: 'Rarity',
-          value: 'Legendary',
-        },
-        {
-          trait_type: 'Location',
-          value: location,
-        },
-        {
-          trait_type: 'Address',
-          value: address,
-        },
-        {
-          trait_type: 'ID',
-          value: id,
-        },
-        {
-          display_type: "boost_percentage",
-          trait_type: 'Progress',
-          value: index,
-        },
-        {
-          trait_type: 'Data',
-          value: data,
-        },
-      ]
       break
     default:
-      body.description = 'This is the first level of the OWL Progress Badge'
       body.image = ProvideImage(0)
-      body.attributes = [
-        {
-          display_type: "number", 
-          trait_type: 'Level',
-          value: '1',
-        },
-        {
-          trait_type: 'Rarity',
-          value: 'Common',
-        },
-        {
-          trait_type: 'Location',
-          value: location,
-        },
-        {
-          trait_type: 'Address',
-          value: address,
-        },
-        {
-          trait_type: 'ID',
-          value: id,
-        },
-        {
-          display_type: "boost_percentage",
-          trait_type: 'Progress',
-          value: index,
-        },
-        {
-          trait_type: 'Data',
-          value: data,
-        },
-      ]
       break
   }
   return body

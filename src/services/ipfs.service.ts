@@ -26,7 +26,8 @@ export default class IPFSService {
       if(!pinataApiKey || !pinataSecretApiKey) {
         throw new Error('API keys not provided')
       }
-
+      console.log('requestBody', requestBody)
+      console.log('headers', headers)
       const response = await axios.post(endpoint, requestBody, {
         headers: headers,
       });

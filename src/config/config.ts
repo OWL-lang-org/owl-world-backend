@@ -17,6 +17,8 @@ interface Config {
     blockScout: string;
     pinataApiKey: string;
     pinataSecretApiKey: string;
+    easContractAddress: string;
+    schemaUID: string;
   };
 }
 
@@ -37,6 +39,8 @@ const config: Config = {
       blockScout: process.env.BLOCKSCOUT_URL || '',
       pinataApiKey: process.env.PINATA_API_KEY || '',
       pinataSecretApiKey: process.env.PINATA_SECRET_KEY || '',
+      easContractAddress: process.env.EAS_CONTRACT_ADDRESS || '',
+      schemaUID: process.env.SCHEMA_UID || '',
     },
 }
 

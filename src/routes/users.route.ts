@@ -18,6 +18,18 @@ export default (app: Router) => {
         }
     });
 
+    route.post('/create-attestation',
+    async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const { address, status } = req.body;
+            const user = await userService.createAttestation(address, status);
+            return res.status(200).json(user);
+        }
+        catch (e) {
+            next(e);
+        }
+    });
+
     route.post('/',
     async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -28,6 +40,18 @@ export default (app: Router) => {
         catch (e) {
             next(e);
         }
+    });
+
+    route.patch('/update-nft',
+    async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const { address, status } = req.body;
+            const user = await userService.updateNft(address, status);
+            return res.status(200).json(user);
+        }
+        catch (e) {
+            next(e);
+        }   
     });
 
     route.patch('/',

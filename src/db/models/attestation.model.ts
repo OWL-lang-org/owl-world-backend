@@ -5,9 +5,7 @@ const ATTESTATION_TABLE = 'attestations';
 
 interface AttestationAttributes {
     uuid: string
-    id: string
-    index: number
-    location: string
+    status: string
     data?: string
     userAddress: string
 }
@@ -18,16 +16,7 @@ const AttestationSchema = {
         allowNull: false,
         primaryKey: true,
     },
-    id: {
-        allowNull: false,
-        type: DataTypes.STRING,
-    },
-    index: {
-        allowNull: false,
-        type: DataTypes.INTEGER,
-    },
-    location: {
-        allowNull: false,
+    status: {
         type: DataTypes.STRING,
     },
     data: {
@@ -49,9 +38,7 @@ const AttestationSchema = {
 class Attestation extends Model<AttestationAttributes> {
 
     public uuid!: string
-    public id!: string
-    public index!: number
-    public location!: string
+    public status!: string
     public userAddress!: string
     public data!: string 
 

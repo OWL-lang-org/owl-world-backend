@@ -1,9 +1,18 @@
 import boom from '@hapi/boom';
 import sequelize from '../libs/sequelize';
+import NftService, { NftMintResponse } from './nft.service';
+import AttestationService from './attestation.service';
+import { config } from '../config/config';
 
 export default class UserService {
 
-    constructor() {}
+    private nftService: NftService;
+    private attestationService: AttestationService;
+
+    constructor() {
+        this.nftService = new NftService();
+        this.attestationService = new AttestationService();
+    }
 
     public async getUserByAddress(address: string) {
         const userRecord = await sequelize.models.User.findByPk(address.toLowerCase(), {
@@ -28,9 +37,62 @@ export default class UserService {
         }
         const user = {
             address: address.toLowerCase(),
+            tokenId: '',
+            hash: '',
         };
+        const nft = await this.nftService.mintNFT({
+            to: address.toLowerCase(),
+            status: '',
+            index: 0,
+            data: '0x',
+        });
+        if (!nft) {
+            throw boom.internal('Failed to mint NFT');
+        }
+        user.tokenId = nft.tokenId;
+        user.hash = nft.txHash || '';
+        const nftResponse = {
+            ...nft,
+            url: `${config.nft.blockScout}${nft.tokenId}`,
+        }
         const newUser = await sequelize.models.User.create(user);
-        return newUser;
+        return {newUser, nft: nftResponse};
+    }
+
+    public async updateNft(address: string, status: string) {
+        const user = await this.getUserByAddress(address);
+        if (!user) {
+            throw boom.notFound('User not found');
+        }
+
+        const updatedUser = await user.update({ status });
+        const attestation = await this.createAttestation(address, status);
+
+        const nft = await this.nftService.updateNFTMetadata(
+            address,
+            11,
+            status,
+            user.dataValues.tokenId,
+            {
+                trait_type: 'Attestation In Game',
+                value: `${attestation.dataValues.uuid}`,
+            }
+        );
+
+        if (!nft) {
+            throw boom.internal('Failed to update NFT');
+        }
+
+        const nftResponse = {
+            ...nft,
+            url: `${config.nft.blockScout}${nft.tokenId}`,
+        }
+
+        return {
+            user: updatedUser,
+            attestation,
+            nft: nftResponse,
+        };
     }
 
     public async updateUserStatus(address: string, status: string) {
@@ -49,13 +111,22 @@ export default class UserService {
         return await userRecord.destroy();
     }
 
-    public async createAttestation(address: string, attestationData: any) {
+    public async createAttestation(address: string, status: string) {
         const user = await this.getUserByAddress(address);
         if (!user) {
             throw boom.notFound('User not found');
         }
+
+        const newAttestation = await this.attestationService.attestMilestone({
+            status,
+            address: user.dataValues.address.toLowerCase(),
+            data: '0x',
+        });
+
         const attestation = {
-            ...attestationData,
+            uuid: newAttestation.newAttestationUID,
+            status: status,
+            data: newAttestation.attestData.find((data) => data.name === 'data')?.value || '0x',
             userAddress: user.dataValues.address.toLowerCase(),
         };
         return await sequelize.models.Attestation.create(attestation);

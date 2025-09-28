@@ -7,9 +7,8 @@ import { config } from '../config/config'
 
 type Props = {
   to: string
-  id: string
   index: number
-  location: string
+  status: string
   data: string
 }
 export type NftMintResponse = {
@@ -20,7 +19,7 @@ export type NftMintResponse = {
 const ipfsService = new IPFSService()
 
 export default class NFTService {
-  public async mintNFT({ to, id, index, location, data }: Props) {
+  public async mintNFT({ to, index, status, data }: Props) {
     try {
       const rpc = config.nft.rpcUrl
       const pk = config.nft.pk
@@ -30,11 +29,10 @@ export default class NFTService {
         throw new Error('RPC or PK not provided')
       }
       const ipfsBody = ProvideBase(
-        id,
-        index,
-        location,
+        status,
         to,
-        data
+        data,
+        index
       )
       const cid = await ipfsService.uploadIPFs(ipfsBody)
       const provider = new ethers.JsonRpcProvider(rpc)
@@ -66,11 +64,9 @@ export default class NFTService {
     }
   }
   public async updateNFTMetadata(
-    id: string,
+    address: string,
     index: number,
-    location: string,
-    to: string,
-    data: string,
+    status: string,
     tokenId: string,
     newAtribute?: {trait_type: string, value: string}
   ) {
@@ -82,21 +78,20 @@ export default class NFTService {
       if (!rpc || !pk || !contractAddress) {
         throw new Error('RPC or PK not provided')
       }
-      //First obtain the information base for the level
       const ipfsBase = ProvideBase(
-        id,
-        index,
-        location,
-        to,
-        data
+        status,
+        address,
+        '0x',
+        index
       )
       const provider = new ethers.JsonRpcProvider(rpc)
       const signer = new ethers.Wallet(pk, provider)
       const nftContract = OWL__factory.connect(contractAddress, signer)
       
-      //then we read the current nft metadata
       const currentUri = await nftContract.tokenURI(tokenId)
-      const metadata = await axios.get(currentUri)
+      const correctUri = currentUri.split('/').pop()
+      console.log('correctUri', correctUri)
+      const metadata = await axios.get(`https://tomato-elaborate-mite-206.mypinata.cloud/ipfs/${correctUri}`)
       let currentMetadata = []
       if(metadata.data.length > 7){
         currentMetadata = metadata.data.slice(0, 7)
@@ -105,6 +100,8 @@ export default class NFTService {
       if(newAtribute){
         ipfsBase.attributes.push(newAtribute)
       }
+      console.log('ipfsBase', ipfsBase)
+      console.log('json', JSON.stringify(ipfsBase))
       const cid = await ipfsService.uploadIPFs(ipfsBase)
       const tx = await nftContract.updateTokenURI(tokenId, cid)
       const txProcessReceipt = await tx.wait()
