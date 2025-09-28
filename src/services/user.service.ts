@@ -173,6 +173,6 @@ export default class UserService {
             ],
         });
 
-        return completion.choices[0].message.content;
+        return JSON.parse(completion.choices[0].message.content || '{}');
     }
 }
