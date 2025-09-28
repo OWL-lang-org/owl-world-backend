@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "nodemon src/index.ts",
     "build": "tsc",
-    "start": "node dist/index.js",
+    "start": "npm run migrations:run && node dist/index.js",
     "migrations:run": "npx ts-node src/db/run-migrations.ts up",
     "migrations:create": "sequelize-cli migration:generate --name",
     "migrations:undo": "npx sequelize-cli db:migrate:undo"
