@@ -18,6 +18,18 @@ export default (app: Router) => {
         }
     });
 
+    route.post('/coach',
+    async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const { address, userPrompt } = req.body;
+            const user = await userService.interactWithGrammarCoach(address, userPrompt);
+            return res.status(200).json(user);
+        }
+        catch (e) {
+            next(e);
+        }
+    });
+
     route.post('/create-attestation',
     async (req: Request, res: Response, next: NextFunction) => {
         try {

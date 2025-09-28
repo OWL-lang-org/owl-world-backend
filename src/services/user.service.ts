@@ -3,6 +3,8 @@ import sequelize from '../libs/sequelize';
 import NftService, { NftMintResponse } from './nft.service';
 import AttestationService from './attestation.service';
 import { config } from '../config/config';
+import { createPrompt } from '../utils/openai/promptCreator';
+import { OpenAI } from 'openai';
 
 export default class UserService {
 
@@ -145,5 +147,32 @@ export default class UserService {
         });
 
         return attestations;
+    }
+
+    public async interactWithGrammarCoach(address: string, userPrompt: string) {
+        const user = await this.getUserByAddress(address);
+        if (!user) {
+            throw boom.notFound('User not found');
+        }
+
+        const prompt = createPrompt(userPrompt);
+
+        const openai = new OpenAI();
+
+        const completion = await openai.chat.completions.create({
+            model: "gpt-4o-mini",
+            messages: [
+                {
+                    role: 'system',
+                    content: prompt.system,
+                },
+                {
+                    role: "user",
+                    content: prompt.user,
+                }
+            ],
+        });
+
+        return completion.choices[0].message.content;
     }
 }
